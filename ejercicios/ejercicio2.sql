@@ -1,0 +1,52 @@
+DROP DATABASE IF EXISTS ejercicio2;
+
+CREATE DATABASE ejercicio2;
+
+USE ejercicio2;
+
+CREATE TABLE drivers (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE parkings (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    city VARCHAR(255) NOT NULL,
+    street VARCHAR(255) NOT NULL,
+    number VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE cars(
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    parking_id INT UNSIGNED NULL,
+    plate_number VARCHAR(255) NOT NULL UNIQUE,
+    brand VARCHAR(255) NOT NULL,
+    model VARCHAR(255) NOT NULL,
+
+    FOREIGN KEY (parking_id) REFERENCES parkings(id)
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
+);
+
+CREATE TABLE car_image (
+    car_id INT UNSIGNED NOT NULL,
+    url VARCHAR(255) NOT NULL UNIQUE,
+
+    FOREIGN KEY (car_id) REFERENCES cars(id)
+);
+
+CREATE TABLE driver_car(
+    driver_id INT UNSIGNED NOT NULL PRIMARY KEY,
+    car_id INT UNSIGNED NOT NULL UNIQUE,
+    start_date DATETIME NOT NULL,
+    end_date DATETIME NOT NULL,
+    
+    FOREIGN KEY (driver_id) REFERENCES drivers(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (car_id) REFERENCES cars(id)
+        ON UPDATE CASCADE
+        ON DELETE CASCADE
+);
